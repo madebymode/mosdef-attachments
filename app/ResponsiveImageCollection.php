@@ -60,9 +60,14 @@ class ResponsiveImageCollection implements ArrayAccess
      */
     public function getSrcSetAttr(array $sizes = [])
     {
-        $images = $this->sizes;
+        $images = $this->getSizes();
+
         if (!empty($sizes)) {
             $images = array_intersect_key($images, array_fill_keys($sizes, null));
+        }
+
+        if (empty($images)) {
+            $images = [];
         }
 
         $attr = [];

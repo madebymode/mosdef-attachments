@@ -9,7 +9,7 @@ class AttachmentServiceProvider extends ServiceProvider
 {
     public function boot()
     {
-        $this->app->bind('Imagine\Image\AbstractImagine', function($app) {
+        $this->app->bind('Imagine\Image\ImagineInterface', function($app) {
             return new Imagine();
         });
 

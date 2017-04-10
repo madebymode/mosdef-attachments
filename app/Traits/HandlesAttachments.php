@@ -64,11 +64,11 @@ trait HandlesAttachments
     }
 
     /**
-     * @return Imagine\Image\AbstractImagine
+     * @return Imagine\Image\ImagineInterface
      */
     public function getFileAsImage()
     {
-        $imagine = app()->make('Imagine\Image\AbstractImagine');
+        $imagine = app()->make('Imagine\Image\ImagineInterface');
         $image = $imagine->open(base_path(ltrim($this->file_path, '/') . '/' . $this->file_name));
 
         return $image;

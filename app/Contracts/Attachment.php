@@ -7,7 +7,7 @@ interface Attachment
 {
     /**
      * return the attachment file as an Imageine instance
-     * @return Imagine\Image\AbstractImagine
+     * @return Imagine\Image\ImagineInterface
      */
     public function getFileAsImage();
 

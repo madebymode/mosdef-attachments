@@ -42,7 +42,8 @@ class AttachmentTest extends \Tests\TestCase
     public function testGetFileAsImage()
     {
         $image = static::$attachment->getFileAsImage();
-        $this->assertInstanceOf(\Imagine\Image\AbstractImagine::class, $image);
+        // seems like assertInstanceOf should've been working here but wasn't.
+        $this->assertTrue(array_key_exists(\Imagine\Image\ImageInterface::class, class_implements($image)));
     }
 
     public function testUnlink()

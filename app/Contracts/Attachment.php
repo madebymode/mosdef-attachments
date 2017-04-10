@@ -32,4 +32,16 @@ interface Attachment
      * @return string
      */
     public function getCleanAttachmentFilename(SplFileInfo $file);
+
+    /**
+     * get a file object for the attachments file
+     * @return SplFileInfo
+     */
+    public function getFile();
+
+    /**
+     * delete the attachment file from disk
+     * @return bool
+     */
+    public function unlink();
 }

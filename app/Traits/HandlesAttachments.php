@@ -74,9 +74,32 @@ trait HandlesAttachments
         return $image;
     }
 
+    /**
+     * get the web accessible path
+     * @return string
+     */
     public function getWebPath()
     {
         $fullPath = base_path(ltrim($this->file_path, '/') . '/' . $this->file_name);
         return str_replace(public_path(), '', $fullPath);
+    }
+
+    /**
+     * get a file object for the attachments file
+     * @return SplFileInfo
+     */
+    public function getFile()
+    {
+        return new SplFileInfo(base_path(ltrim($this->file_path, '/') . '/' . $this->file_name));
+    }
+
+    /**
+     * delete the attachment file from disk
+     * @return bool
+     */
+    public function unlink()
+    {
+        $file = $this->getFile();
+        return unlink($file->getPathname());
     }
 }

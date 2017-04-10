@@ -23,3 +23,5 @@ Add the repository to the composer.json file
     }
 ]
 ```
+
+Execute the following `php artisan vendor:publish --tag=attachment-migrations`

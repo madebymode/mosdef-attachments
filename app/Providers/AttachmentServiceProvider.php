@@ -10,7 +10,7 @@ class AttachmentServiceProvider extends ServiceProvider
     public function boot()
     {
         $this->app->bind('Imagine\Image\AbstractImagine', function($app) {
-            return new Imagine\Imagick\Imagine();
+            return new Imagine();
         });
 
         $this->app->bind('Mosdef\Attachments\Contracts\Attachment', function($app) {

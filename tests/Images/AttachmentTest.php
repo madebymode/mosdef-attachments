@@ -1,15 +1,15 @@
 <?php
 
-namespace Mosdef\Attachments\Tests\App\Support;
+namespace Mosdef\Attachments\Tests\Images;
 
-use Mosdef\Attachments\ResponsiveAttachment;
-use Mosdef\Attachments\ResponsiveImageConfiguration;
-use Mosdef\Attachments\ResponsiveImageCollection;
+use Mosdef\Attachments\Images\Attachment;
+use Mosdef\Attachments\Images\Configuration;
+use Mosdef\Attachments\Images\Collection;
 use Illuminate\Http\UploadedFile;
 use Request;
 use SplFileInfo;
 
-class ResponsiveAttachmentTest extends \Tests\TestCase
+class AttachmentTest extends \Tests\TestCase
 {
     protected static $attachment;
 
@@ -26,8 +26,8 @@ class ResponsiveAttachmentTest extends \Tests\TestCase
             $request = Request::instance();
             $request->files->add(['image' => $imgFile]);
 
-            static::$attachment = ResponsiveAttachment::createFromRequest('image');
-            static::$responsiveConfiguration = new ResponsiveImageConfiguration();
+            static::$attachment = Attachment::createFromRequest('image');
+            static::$responsiveConfiguration = new Configuration();
             static::$responsiveConfiguration->setSizes([1104, 1000, 800, 600, 400, 27]);
         }
     }
@@ -52,7 +52,7 @@ class ResponsiveAttachmentTest extends \Tests\TestCase
     public function testGetImageCollection()
     {
         $collection = static::$attachment->getImageCollection();
-        $this->assertInstanceOf(ResponsiveImageCollection::class, $collection);
+        $this->assertInstanceOf(Collection::class, $collection);
 
         $this->assertTrue(!empty($collection->getSrc()));
         $this->assertTrue(!empty($collection->getSizes()));

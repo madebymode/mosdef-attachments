@@ -1,7 +1,7 @@
 <?php
-namespace Mosdef\Attachments;
+namespace Mosdef\Attachments\Images;
 
-class ResponsiveImageConfiguration
+class Configuration
 {
     protected $sizes;
 

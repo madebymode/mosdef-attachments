@@ -1,6 +1,5 @@
 <?php
-
-namespace Mosdef\Attachments\Tests\App\Support;
+namespace Mosdef\Attachments\Tests;
 
 use Mosdef\Attachments\Attachment;
 use Illuminate\Http\UploadedFile;

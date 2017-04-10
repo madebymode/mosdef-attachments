@@ -1,9 +1,9 @@
 <?php
-namespace Mosdef\Attachments\Tests\App\Support;
+namespace Mosdef\Attachments\Tests\Images;
 
-use Mosdef\Attachments\ResponsiveImageCollection;
+use Mosdef\Attachments\Images\Collection;
 
-class ResponsiveImageCollectionTest extends \Tests\TestCase
+class CollectionTest extends \Tests\TestCase
 {
     protected static $collection;
 
@@ -18,7 +18,7 @@ class ResponsiveImageCollectionTest extends \Tests\TestCase
         parent::setUp();
 
         if (empty(static::$collection)) {
-            static::$collection = new ResponsiveImageCollection();
+            static::$collection = new Collection();
         }
     }
 

@@ -1,9 +1,9 @@
 <?php
-namespace Mosdef\Attachments;
+namespace Mosdef\Attachments\Images;
 
 use ArrayAccess;
 
-class ResponsiveImageCollection implements ArrayAccess
+class Collection implements ArrayAccess
 {
     /**
      * the src image that other sizes are based on

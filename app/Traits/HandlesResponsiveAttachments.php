@@ -1,7 +1,7 @@
 <?php
 namespace Mosdef\Attachments\Traits;
 
-use Mosdef\Attachments\ResponsiveImageConfiguration;
+use Mosdef\Attachments\Images\Configuration;
 use Request;
 use SplFileInfo;
 
@@ -16,7 +16,7 @@ trait HandlesResponsiveAttachments
         return preg_replace('/(\.' . preg_quote($extension) . ')$/', $suffix . '$1', $this->file_name);
     }
 
-    public function setImageConfiguration(ResponsiveImageConfiguration $config)
+    public function setImageConfiguration(Configuration $config)
     {
         $this->imageConfiguration = $config;
     }
@@ -58,7 +58,7 @@ trait HandlesResponsiveAttachments
      */
     public function getImageCollection()
     {
-        $collection = app()->make('Mosdef\Attachments\ResponsiveImageCollection');
+        $collection = app()->make('Mosdef\Attachments\Images\Collection');
 
         $imageConfiguration = $this->getImageConfiguration();
 

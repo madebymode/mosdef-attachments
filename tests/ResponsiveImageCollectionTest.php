@@ -22,6 +22,11 @@ class ResponsiveImageCollectionTest extends \Tests\TestCase
         }
     }
 
+    public function testImplementsArrayAccess()
+    {
+        $this->assertTrue(static::$collection instanceof \ArrayAccess);
+    }
+
     public function testSetGetSrc()
     {
         $src = '/path/to/img.jpg';
@@ -46,5 +51,28 @@ class ResponsiveImageCollectionTest extends \Tests\TestCase
         }
 
         $this->assertEquals(implode(', ', $attr), $srcset);
+    }
+
+    public function testOffsetExists()
+    {
+        $this->assertTrue(isset(static::$collection[100]));
+        $this->assertFalse(isset(static::$collection['does-not-exist']));
+    }
+
+    public function testOffsetGet()
+    {
+        $this->assertEquals('/path/to/img@100.jpg', static::$collection[100]);
+    }
+
+    public function testOffsetSetThrowsLogicException()
+    {
+        $this->expectException(\LogicException::class);
+        static::$collection['new-var'] = 'test';
+    }
+
+    public function testUnsetThrowsLogicException()
+    {
+        $this->expectException(\LogicException::class);
+        unset(static::$collection['cannot-unset']);
     }
 }

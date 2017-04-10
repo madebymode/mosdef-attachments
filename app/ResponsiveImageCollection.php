@@ -85,7 +85,7 @@ class ResponsiveImageCollection implements ArrayAccess
      */
     public function offsetExists($offset)
     {
-        return array_key_exists($offset, $this->sizes) || property_exists($this, $offset);
+        return array_key_exists($offset, $this->getSizes()) || property_exists($this, $offset);
     }
 
     /**

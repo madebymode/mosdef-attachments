@@ -42,8 +42,7 @@ class AttachmentTest extends \Tests\TestCase
     public function testGetFileAsImage()
     {
         $image = static::$attachment->getFileAsImage();
-
-        print_r($image);
+        $this->assertInstanceOf(\Imagine\Image\AbstractImagine::class, $image);
     }
 
     public function testUnlink()

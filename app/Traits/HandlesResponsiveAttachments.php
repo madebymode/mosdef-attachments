@@ -1,26 +1,47 @@
 <?php
 namespace Mosdef\Attachments\Traits;
 
+use Mosdef\Attachments\ResponsiveImageConfiguration;
 use Request;
 use SplFileInfo;
 
 trait HandlesResponsiveAttachments
 {
-    protected $imageTypes = [];
+    protected $imageConfiguration;
 
-    public function createResponsiveSizes($imageType)
+    protected function getResponsiveFilename($size, $suffix = '@')
+    {
+        $suffix = $suffix . $size;
+        $extension = pathinfo($this->file_name, PATHINFO_EXTENSION);
+        return preg_replace('/(\.' . preg_quote($extension) . ')$/', $suffix . '$1', $this->file_name);
+    }
+
+    public function setImageConfiguration(ResponsiveImageConfiguration $config)
+    {
+        $this->imageConfiguration = $config;
+    }
+
+    public function getImageConfiguration()
+    {
+        return $this->imageConfiguration;
+    }
+
+    public function createResponsiveSizes()
     {
         $image = $this->getFileAsImage();
+        $imageConfiguration = $this->getImageConfiguration();
 
+        if (empty($imageConfiguration)) {
+            throw new \InvalidArgumentException('no image configuration provided');
+        }
+
+        $sizes = $imageConfiguration->getSizes();
         $imageDimensions = $image->getSize();
 
         foreach ($sizes as $size) {
-            $suffix = '@' . $size;
 
-            $extension = pathinfo($this->file_name, PATHINFO_EXTENSION);
-            $thumbName = preg_replace('/(\.' . preg_quote($extension) . ')$/', $suffix . '$1', $this->file_name);
-
-            $thumbPath = ltrim($this->file_path, '/') . '/' . $this->file_name;
+            $thumbName = $this->getResponsiveFilename($size);
+            $thumbPath = ltrim($this->file_path, '/') . '/' . $thumbName;
 
             $image->resize($imageDimensions->scale($size / $imageDimensions->getWidth()))->save(base_path($thumbPath));
 
@@ -31,50 +52,45 @@ trait HandlesResponsiveAttachments
         return $generatedThumbs;
     }
 
-    public function getImageCollection(array $sizes = [])
+    /**
+     * return an image collection instance
+     * @return Mosdef\Attachments\ResponsiveImageCollection
+     */
+    public function getImageCollection()
     {
-    // public function getResponsiveImages($attachment = null) {
-    //     if (!$attachment) return;
-    //     $sizes = array('800','600','400');
-    //     $thumbs = array();
-    //     foreach ($sizes as $size) {
-    //         $suffix = '@' . $size;
-    //         $thumb_path = preg_replace('/(\.jpg|\.png)/', $suffix . '$1', ltrim($attachment->file_path, '/') . '/' . $attachment->file_name);
-    //         if (File::exists(base_path($thumb_path))) { $thumbs[$size] = str_replace(public_path(), '', base_path($thumb_path)); }
-    //     }
-    //     if(count(array_intersect_key(array_flip($sizes), $thumbs)) === count($sizes)) {
-    //         return $thumbs;
-    //     }
-    //     return;
-    // }
-    //
-    //
-    //
-    //
-    //
-    //
-            // $filename = $field_props['filename'];
+        $collection = app()->make('Mosdef\Attachments\ResponsiveImageCollection');
 
-            // $path = '/img/_content/' . $class_name . '/_default/' . $filename;
+        $imageConfiguration = $this->getImageConfiguration();
 
-            // if (!file_exists($options['base_path'] . '/' . $filename)) {
-            //     continue;
-            // }
+        if (empty($imageConfiguration)) {
+            throw new \InvalidArgumentException('no image configuration provided');
+        }
 
-            // $path = Assets::getUrl($options['web_path'] . '/' . pathinfo($filename, PATHINFO_FILENAME) . '.' . pathinfo($filename, PATHINFO_EXTENSION), $cache_ts);
+        $sizes = $imageConfiguration->getSizes();
 
-            // if (!empty(static::$_images[$field_name]['responsive_widths'])) {
-            //     $collection->{$field_name . '_src'} = $path;
+        $webPath = $this->getWebPath();
+        $webDir = dirname($webPath);
 
-            //     // Add src for each srcset size (so sizes can be referenced as needed)
-            //     foreach (static::$_images[$field_name]['responsive_widths'] as $size) {
-            //         $collection->{$field_name . '_' . $size . '_src'} = preg_replace('/(\.[0-9]+)?(\.jpg|\.png)/', '@' . $size . '$1$2', $path);
-            //     }
+        $collection->setSrc($webPath);
 
-            //     $collection->{$field_name} = (object) ['srcset' => static::getImgSrcset($path, $field_name) ];
-            //     continue;
-            // }
+        $responsiveImages = [];
+        foreach($sizes as $size) {
+            $webPath = $webDir . '/' . $this->getResponsiveFilename($size);
+            $responsiveImages[$size] = $webPath;
+        }
 
-            // $collection->{$field_name} = $path;
+        $collection->setSizes($responsiveImages);
+
+        return $collection;
+    }
+
+    public function unlinkAll()
+    {
+        $pattern = base_path(trim($this->file_path, '/') . '/' . pathinfo($this->file_name, PATHINFO_FILENAME) . '*');
+        $paths = glob($pattern);
+
+        foreach($paths as $path) {
+            unlink($path);
+        }
     }
 }

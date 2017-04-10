@@ -4,7 +4,7 @@ namespace Mosdef\Attachments\Traits;
 use Requests;
 use SplFileInfo;
 
-trait HandlesAttachmentsFromExstingFile
+trait HandlesAttachmentsFromExistingFile
 {
     public static function createFromFile($path, array $opts = [])
     {

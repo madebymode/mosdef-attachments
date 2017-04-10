@@ -4,6 +4,7 @@ namespace Mosdef\Attachments\Providers;
 use Illuminate\Support\ServiceProvider;
 use Imagine\Imagick\Imagine;
 use Mosdef\Attachments\Attachment;
+use Mosdef\Attachments\ImagesAttachment as ImageAttachment;
 use Mosdef\Attachments\Images\Collection;
 
 class AttachmentServiceProvider extends ServiceProvider
@@ -18,8 +19,16 @@ class AttachmentServiceProvider extends ServiceProvider
             return new Attachment();
         });
 
+        $this->app->bind('Mosdef\Attachments\Images\Attachment', function($app) {
+            return new ImageAttachment();
+        });
+
         $this->app->bind('Mosdef\Attachments\Images\Collection', function($app) {
             return new Collection();
+        });
+
+        $this->app->bind('Mosdef\Attachments\Images\Configuration', function($app) {
+            return new Configuration();
         });
 
         $this->publishMigrations();

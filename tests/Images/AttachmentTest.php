@@ -1,5 +1,4 @@
 <?php
-
 namespace Mosdef\Attachments\Tests\Images;
 
 use Mosdef\Attachments\Images\Attachment;
@@ -7,7 +6,7 @@ use Mosdef\Attachments\Images\Configuration;
 use Mosdef\Attachments\Images\Collection;
 use Illuminate\Http\UploadedFile;
 use Request;
-use SplFileInfo;
+use Artisan;
 
 class AttachmentTest extends \Tests\TestCase
 {
@@ -19,6 +18,8 @@ class AttachmentTest extends \Tests\TestCase
     {
         parent::setUp();
 
+        Artisan::call('migrate');
+
         if (empty(static::$attachment)) {
             $fileFactory = UploadedFile::fake();
             $imgFile = $fileFactory->image('test-img.jpg');
@@ -26,7 +27,8 @@ class AttachmentTest extends \Tests\TestCase
             $request = Request::instance();
             $request->files->add(['image' => $imgFile]);
 
-            static::$attachment = Attachment::createFromRequest('image');
+            static::$attachment = $this->getMockForAbstractClass('\Mosdef\Attachments\Images\Attachment');
+            static::$attachment->getFileFromRequest('image');
             static::$responsiveConfiguration = new Configuration();
             static::$responsiveConfiguration->setSizes([1104, 1000, 800, 600, 400, 27]);
         }
@@ -59,13 +61,13 @@ class AttachmentTest extends \Tests\TestCase
         $this->assertTrue(is_array($collection->getSizes()));
     }
 
-    public function testUnlinkAll()
+    public function testUnlink()
     {
         // manually get a list of file paths to be able to validate they're all removed
         $pattern = base_path(trim(static::$attachment->file_path, '/') . '/' . pathinfo(static::$attachment->file_name, PATHINFO_FILENAME) . '*');
         $paths = glob($pattern);
 
-        static::$attachment->unlinkAll();
+        static::$attachment->unlink();
 
         $this->assertTrue(count($paths) > 0);
         foreach($paths as $path) {

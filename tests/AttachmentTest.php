@@ -1,10 +1,11 @@
 <?php
 namespace Mosdef\Attachments\Tests;
 
-use Mosdef\Attachments\Attachment;
 use Illuminate\Http\UploadedFile;
 use Request;
-use SplFileInfo;
+use Artisan;
+use Requests_Exception;
+use Symfony\Component\HttpFoundation\File\Exception\FileNotFoundException;
 
 class AttachmentTest extends \Tests\TestCase
 {
@@ -14,6 +15,8 @@ class AttachmentTest extends \Tests\TestCase
     {
         parent::setUp();
 
+        Artisan::call('migrate');
+
         if (empty(static::$attachment)) {
             $fileFactory = UploadedFile::fake();
             $imgFile = $fileFactory->image('test-img.jpg');
@@ -21,8 +24,14 @@ class AttachmentTest extends \Tests\TestCase
             $request = Request::instance();
             $request->files->add(['image' => $imgFile]);
 
-            static::$attachment = Attachment::createFromRequest('image');
+            static::$attachment = $this->getMockForAbstractClass('\Mosdef\Attachments\Attachment');
         }
+    }
+
+    public function testGetFileFromRequest()
+    {
+        $file = static::$attachment->getFileFromRequest('image');
+        $this->assertInstanceOf(UploadedFile::class, $file);
     }
 
     public function testGetWebPath()
@@ -34,7 +43,7 @@ class AttachmentTest extends \Tests\TestCase
     {
         $file = static::$attachment->getFile();
 
-        $this->assertInstanceOf(SplFileInfo::class, $file);
+        $this->assertInstanceOf(UploadedFile::class, $file);
         $this->assertTrue(!empty($file->getPathname()));
     }
 
@@ -51,5 +60,34 @@ class AttachmentTest extends \Tests\TestCase
         static::$attachment->unlink();
 
         $this->assertFalse(file_exists($file->getPathname()));
+    }
+
+    public function testGetFileFromUrl()
+    {
+        $file = static::$attachment->getFileFromUrl('http://replygif.net/i/132.gif');
+        $this->assertInstanceOf(UploadedFile::class, $file);
+        $this->assertEquals('gif', $file->getExtension());
+        static::$attachment->unlink();
+
+        $file = static::$attachment->getFileFromUrl('http://rs263.pbsrc.com/albums/ii134/imdbjb/gifs/65xv2d.gif~c200');
+        $this->assertInstanceOf(UploadedFile::class, $file);
+        $this->assertEquals('gif', $file->getExtension());
+        static::$attachment->unlink();
+
+        $this->expectException(Requests_Exception::class);
+        static::$attachment->getFileFromUrl('http://invaliddomain.com/path/to/does/not/exist');
+    }
+
+    public function testGetFileFromExistingFile()
+    {
+        copy(__DIR__ . '/fixtures/demo.pdf', storage_path('app/demo.pdf'));
+
+        $file = static::$attachment->getFileFromExistingFile(storage_path('app/demo.pdf'));
+        $this->assertInstanceOf(UploadedFile::class, $file);
+        $this->assertEquals('pdf', $file->getExtension());
+        static::$attachment->unlink();
+
+        $this->expectException(FileNotFoundException::class);
+        static::$attachment->getFileFromExistingFile('path/to/file/that/doesnt/exist.pdf');
     }
 }

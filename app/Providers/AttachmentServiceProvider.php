@@ -6,6 +6,7 @@ use Imagine\Imagick\Imagine;
 use Mosdef\Attachments\Attachment;
 use Mosdef\Attachments\ImagesAttachment as ImageAttachment;
 use Mosdef\Attachments\Images\Collection;
+use Symfony\Component\HttpFoundation\File\MimeType\ExtensionGuesser;
 
 class AttachmentServiceProvider extends ServiceProvider
 {
@@ -29,6 +30,10 @@ class AttachmentServiceProvider extends ServiceProvider
 
         $this->app->bind('Mosdef\Attachments\Images\Configuration', function($app) {
             return new Configuration();
+        });
+
+        $this->app->bind('ExtensionGuesser', function($app) {
+            return ExtensionGuesser::getInstance();
         });
 
         $this->publishMigrations();

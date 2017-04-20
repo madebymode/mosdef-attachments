@@ -1,7 +1,7 @@
 <?php
 namespace Mosdef\Attachments\Contracts;
 
-use SplFileInfo;
+use Illuminate\Http\UploadedFile;
 
 interface Attachment
 {
@@ -20,18 +20,18 @@ interface Attachment
     /**
      * return a randomized attachment name
      *
-     * @param  SplFileInfo $file
+     * @param  UploadedFile $file
      * @return string
      */
-    public function getRandomAttachmentFilename(SplFileInfo $file);
+    public function getRandomAttachmentFilename(UploadedFile $file);
 
     /**
      * return a cleaned up attachment name
      *
-     * @param  SplFileInfo $file
+     * @param  UploadedFile $file
      * @return string
      */
-    public function getCleanAttachmentFilename(SplFileInfo $file);
+    public function getCleanAttachmentFilename(UploadedFile $file);
 
     /**
      * get a file object for the attachments file

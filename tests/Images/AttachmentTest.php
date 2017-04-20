@@ -43,7 +43,7 @@ class AttachmentTest extends \Tests\TestCase
 
     public function testCreateResponsiveSizes()
     {
-        $images = static::$attachment->createResponsiveSizes();
+        $images = static::$attachment->generateResponsiveSizes();
 
         foreach(static::$responsiveConfiguration->getSizes() as $index => $size) {
             $this->assertTrue(stripos($images[$index], '@' . $size) !== false);

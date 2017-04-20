@@ -8,6 +8,12 @@ abstract class Attachment extends BaseAttachment
 {
     protected $imageConfiguration;
 
+    /**
+     * create the name for a responsive image
+     * @param  integer $size
+     * @param  string $suffix
+     * @return string
+     */
     protected function getResponsiveFilename($size, $suffix = '@')
     {
         $suffix = $suffix . $size;
@@ -15,17 +21,29 @@ abstract class Attachment extends BaseAttachment
         return preg_replace('/(\.' . preg_quote($extension) . ')$/', $suffix . '$1', $this->file_name);
     }
 
+    /**
+     * set the image configuration
+     * @param Configuration $config
+     */
     public function setImageConfiguration(Configuration $config)
     {
         $this->imageConfiguration = $config;
     }
 
+    /**
+     * get the image configuration
+     * @return Configuration
+     */
     public function getImageConfiguration()
     {
         return $this->imageConfiguration;
     }
 
-    public function createResponsiveSizes()
+    /**
+     * generate the responses mased on the image configuration
+     * @return array - image paths
+     */
+    public function generateResponsiveSizes()
     {
         $image = $this->getFileAsImage();
         $imageConfiguration = $this->getImageConfiguration();
@@ -83,6 +101,10 @@ abstract class Attachment extends BaseAttachment
         return $collection;
     }
 
+    /**
+     * overrides the unline method to delete all the responsive sizes
+     * @return void
+     */
     public function unlink()
     {
         $pattern = base_path(trim($this->file_path, '/') . '/' . pathinfo($this->file_name, PATHINFO_FILENAME) . '*');

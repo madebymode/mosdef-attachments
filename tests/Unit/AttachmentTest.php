@@ -5,6 +5,7 @@ use Illuminate\Http\UploadedFile;
 use Request;
 use Artisan;
 use Requests_Exception;
+use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\File\Exception\FileNotFoundException;
 
 class AttachmentTest extends \Tests\TestCase
@@ -31,10 +32,21 @@ class AttachmentTest extends \Tests\TestCase
     public function testGetFileFromRequest()
     {
         $file = static::$attachment->getFileFromRequest('image');
-        $this->assertInstanceOf(UploadedFile::class, $file);
+        $this->assertInstanceOf(File::class, $file);
     }
 
-    public function testGetWebPath()
+    public function testGetWebPathWithNonPublicFile()
+    {
+        $this->expectException(\LogicException::class);
+        $this->assertEquals('/uploads/' . static::$attachment->file_name, static::$attachment->getWebPath());
+    }
+
+    public function testMove()
+    {
+        static::$attachment->move(public_path('uploads'));
+    }
+
+    public function testGetWebPathWithPublicFile()
     {
         $this->assertEquals('/uploads/' . static::$attachment->file_name, static::$attachment->getWebPath());
     }
@@ -43,7 +55,7 @@ class AttachmentTest extends \Tests\TestCase
     {
         $file = static::$attachment->getFile();
 
-        $this->assertInstanceOf(UploadedFile::class, $file);
+        $this->assertInstanceOf(File::class, $file);
         $this->assertTrue(!empty($file->getPathname()));
     }
 
@@ -65,12 +77,12 @@ class AttachmentTest extends \Tests\TestCase
     public function testGetFileFromUrl()
     {
         $file = static::$attachment->getFileFromUrl('http://replygif.net/i/132.gif');
-        $this->assertInstanceOf(UploadedFile::class, $file);
+        $this->assertInstanceOf(File::class, $file);
         $this->assertEquals('gif', $file->getExtension());
         static::$attachment->unlink();
 
         $file = static::$attachment->getFileFromUrl('http://rs263.pbsrc.com/albums/ii134/imdbjb/gifs/65xv2d.gif~c200');
-        $this->assertInstanceOf(UploadedFile::class, $file);
+        $this->assertInstanceOf(File::class, $file);
         $this->assertEquals('gif', $file->getExtension());
         static::$attachment->unlink();
 
@@ -80,10 +92,10 @@ class AttachmentTest extends \Tests\TestCase
 
     public function testGetFileFromExistingFile()
     {
-        copy(__DIR__ . '/fixtures/demo.pdf', storage_path('app/demo.pdf'));
+        copy(__DIR__ . '/../fixtures/demo.pdf', storage_path('app/demo.pdf'));
 
         $file = static::$attachment->getFileFromExistingFile(storage_path('app/demo.pdf'));
-        $this->assertInstanceOf(UploadedFile::class, $file);
+        $this->assertInstanceOf(File::class, $file);
         $this->assertEquals('pdf', $file->getExtension());
         static::$attachment->unlink();
 

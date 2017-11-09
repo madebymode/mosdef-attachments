@@ -1,7 +1,7 @@
 <?php
 namespace Mosdef\Attachments\Contracts;
 
-use Illuminate\Http\UploadedFile;
+use Symfony\Component\HttpFoundation\File\File;
 
 interface Attachment
 {
@@ -20,18 +20,18 @@ interface Attachment
     /**
      * return a randomized attachment name
      *
-     * @param  UploadedFile $file
+     * @param  string $filename
      * @return string
      */
-    public function getRandomAttachmentFilename(UploadedFile $file);
+    public function getRandomFilename($filename);
 
     /**
      * return a cleaned up attachment name
      *
-     * @param  UploadedFile $file
+     * @param  string $file
      * @return string
      */
-    public function getCleanAttachmentFilename(UploadedFile $file);
+    public function getCleanFilename($filename);
 
     /**
      * get a file object for the attachments file

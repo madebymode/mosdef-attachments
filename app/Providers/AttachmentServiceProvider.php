@@ -6,6 +6,7 @@ use Imagine\Imagick\Imagine;
 use Mosdef\Attachments\Attachment;
 use Mosdef\Attachments\ImagesAttachment as ImageAttachment;
 use Mosdef\Attachments\Images\Collection;
+use Mosdef\Attachments\Images\Configuration;
 use Symfony\Component\HttpFoundation\File\MimeType\ExtensionGuesser;
 
 class AttachmentServiceProvider extends ServiceProvider

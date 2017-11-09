@@ -29,6 +29,7 @@ class AttachmentTest extends \Tests\TestCase
 
             static::$attachment = $this->getMockForAbstractClass('\Mosdef\Attachments\Images\Attachment');
             static::$attachment->getFileFromRequest('image');
+            static::$attachment->move(public_path('uploads'));
             static::$responsiveConfiguration = new Configuration();
             static::$responsiveConfiguration->setSizes([1104, 1000, 800, 600, 400, 27]);
         }

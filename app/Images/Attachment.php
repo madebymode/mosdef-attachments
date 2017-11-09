@@ -114,4 +114,18 @@ abstract class Attachment extends BaseAttachment
             unlink($path);
         }
     }
+
+    public function jsonSerialize()
+    {
+        if (!in_array('image_collection', $this->appends)) {
+            $this->appends[] = 'image_collection';
+        }
+
+        return parent::jsonSerialize();
+    }
+
+    public function getImageCollectionAttribute()
+    {
+        return $this->getImageCollection();
+    }
 }

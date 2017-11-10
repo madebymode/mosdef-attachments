@@ -6,19 +6,19 @@ use ArrayAccess;
 class Collection implements ArrayAccess
 {
     /**
-     * the src image that other sizes are based on
+     * The src image that other sizes are based on
      * @var string
      */
     protected $src;
 
     /**
-     * collection of images for each size
+     * Collection of images for each size
      * @var array
      */
     protected $sizes;
 
     /**
-     * set the src image. the image that the various sizes are based on
+     * Set the src image. The image that the various sizes are based on
      * @param string $src
      */
     public function setSrc($src)
@@ -27,7 +27,7 @@ class Collection implements ArrayAccess
     }
 
     /**
-     * get the src image
+     * Get the src image
      * @return string
      */
     public function getSrc()
@@ -36,7 +36,7 @@ class Collection implements ArrayAccess
     }
 
     /**
-     * set the images for various sizes. an array of image paths indexed by their width
+     * Set the images for various sizes. An array of image paths indexed by their width.
      * @param array $sizes
      */
     public function setSizes(array $sizes = [])
@@ -45,8 +45,8 @@ class Collection implements ArrayAccess
     }
 
     /**
-     * get the images for various sizes.
-     * @return array of image paths indexed by their widths
+     * Get the images for various sizes.
+     * @return array Image paths indexed by their widths
      */
     public function getSizes()
     {
@@ -54,8 +54,8 @@ class Collection implements ArrayAccess
     }
 
     /**
-     * get a string formatted as a srcset attribute.
-     * @param  array  $sizes optionally only include specific sizes
+     * Get a string formatted as a srcset attribute.
+     * @param  array  $sizes Optionally only include specific sizes
      * @return string
      */
     public function getSrcSetAttr(array $sizes = [])
@@ -79,7 +79,7 @@ class Collection implements ArrayAccess
     }
 
     /**
-     * implement offsetExists for ArrayAccessible
+     * Implement offsetExists for ArrayAccessible
      * @param  mixed $offset
      * @return boolean
      */
@@ -89,7 +89,7 @@ class Collection implements ArrayAccess
     }
 
     /**
-     * implement offsetGet for ArrayAccessible
+     * Implement offsetGet for ArrayAccessible
      * @param  mixed $offset
      * @return mixed
      */
@@ -103,7 +103,7 @@ class Collection implements ArrayAccess
     }
 
     /**
-     * implement offsetSet for ArrayAccessible
+     * Implement offsetSet for ArrayAccessible
      * @param  mixed $offset
      * @param  mixed $value
      * @throws LogicException
@@ -114,7 +114,7 @@ class Collection implements ArrayAccess
     }
 
     /**
-     * implement offsetUnset for ArrayAccessible
+     * Implement offsetUnset for ArrayAccessible
      * @param  mixed $offset
      * @throws LogicException
      */

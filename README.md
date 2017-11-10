@@ -24,7 +24,22 @@ Add the repository to the composer.json file
 ]
 ```
 
-Execute the following `php artisan vendor:publish --tag=attachment-migrations`
+Publish the attachment migrations
+```bash
+php artisan vendor:publish --tag=attachment-migrations
+```
+
+Install the `TemplateServiceProvider` in `config/app.php`. It should be added in the 'Application Service Providers' section.
+
+```php
+[
+    /*
+     * Application Service Providers...
+     */
+    Mosdef\Helpers\Providers\TemplateServiceProvider::class
+]
+```
+
 
 ## Usage
 

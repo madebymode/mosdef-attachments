@@ -9,7 +9,7 @@ abstract class Attachment extends BaseAttachment
     protected $imageConfiguration;
 
     /**
-     * create the name for a responsive image
+     * Create the name for a responsive image
      * @param  integer $size
      * @param  string $suffix
      * @return string
@@ -22,7 +22,7 @@ abstract class Attachment extends BaseAttachment
     }
 
     /**
-     * set the image configuration
+     * Set the image configuration
      * @param Configuration $config
      */
     public function setImageConfiguration(Configuration $config)
@@ -31,7 +31,7 @@ abstract class Attachment extends BaseAttachment
     }
 
     /**
-     * get the image configuration
+     * Get the image configuration
      * @return Configuration
      */
     public function getImageConfiguration()
@@ -40,8 +40,8 @@ abstract class Attachment extends BaseAttachment
     }
 
     /**
-     * generate the responses mased on the image configuration
-     * @return array - image paths
+     * Generate the responses based on the image configuration
+     * @return array image paths
      */
     public function generateResponsiveSizes()
     {
@@ -70,7 +70,7 @@ abstract class Attachment extends BaseAttachment
     }
 
     /**
-     * return an image collection instance
+     * Return an image collection instance
      * @return Mosdef\Attachments\ResponsiveImageCollection
      */
     public function getImageCollection()
@@ -102,7 +102,7 @@ abstract class Attachment extends BaseAttachment
     }
 
     /**
-     * overrides the unline method to delete all the responsive sizes
+     * Overrides the unlink method to delete all the responsive sizes
      * @return void
      */
     public function unlink()

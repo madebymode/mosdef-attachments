@@ -23,7 +23,7 @@
   "extra": {
     "laravel": {
       "providers": [
-        "Mosdef\\Helpers\\Providers\\AttachmentServiceProvider"
+        "Mosdef\\Attachments\\Providers\\AttachmentServiceProvider"
       ]
     }
   }

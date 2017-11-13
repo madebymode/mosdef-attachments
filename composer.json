@@ -19,5 +19,12 @@
       "Mosdef\\Attachments\\Tests\\": "tests/"
     }
   },
-  "minimum-stability": "stable"
+  "minimum-stability": "stable",
+  "extra": {
+    "laravel": {
+      "providers": [
+        "Mosdef\\Helpers\\Providers\\AttachmentServiceProvider"
+      ]
+    }
+  },
 }
